@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+    <style>
+        * {
+            margin-top: 20px;
+        }
+
+        .demo1 {
+            height: 40px;
+            background-color: blueviolet
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- 事件处理 -->
+    <div id="root">
+        <h2>欢迎来到{{name}}</h2>
+        <button @click="showInfo1">点我给玫瑰浇水</button>
+        <button @click="showInfo2($event,66)">点我给凤仙浇水</button>
+    </div>
+    <script type="text/javascript">
+        const vm = new Vue({
+            el: '#root',
+            data: {
+                name: '莫奈花园',
+            },
+            methods: {
+                showInfo1(event) {
+                    alert('玫瑰花说：“谢谢你”')
+                },
+                showInfo2(event, number) {
+                    console.log(event, number)
+                    alert('凤仙花说：“我不需要你给我浇水”')
+                }
+            }
+        })
+        console.log(Math.random) 
+    </script>
+
+    <!-- ------------------------------------------------ -->
+    <!-- 事件修饰符 -->
+    <div id="root1">
+        <div class="demo1" @click="showInfo">
+            <!-- 阻止冒泡.stop -->
+            <button @click.stop="showInfo">点我获取信息</button>
+        </div>
+        <!-- 组织默认事件.prevent  在这里是跳转链接 -->
+        <a href="http://www.csdn.net" @click.prevent="showInfo">去往CSDN首,同时提示信息</a>
+        <div>
+            <button @click.once="showInfo">我只会触发一次</button>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#root1',
+            methods: {
+                showInfo(e) {
+
+                    alert('你好！')
+                }
+            }
+        })
+    </script>
+
+    <!-- ------------------------------------------------ -->
+    <!-- 键盘事件 -->
+    <!-- 
+        常用按键别名：
+        enter回车
+        delete删除
+        esc退出
+        space空格
+        tab换行   特殊 适用@keydown.tab
+        up down left right上下左右
+        caps-lock 切换大小写，未提供别名的按键
+        系统修饰键 ctrl alt shift meta配合@keydown
+     -->
+    <div id="root2">
+        <input type="text" placeholder="按键提示输入" @keyup.enter="showInfo">
+    </div>
+    <script>
+        new Vue({
+            el: '#root2',
+            methods: {
+                showInfo(e) {
+                    console.log(e.target.value)
+                    // console.log(e.key, e.value)获取键名
+                }
+            }
+        })
+    </script>
+
+    <!-- 天气案例 -->
+    <div id="root3">
+        <h1>今天天气很{{info}},{{x}}</h1>
+        <button @click="changeWeather">切换天气</button>
+        <h3>a的值是:{{numbers.a}}</h3>
+        <button @click="numbers.a++">点我让a+1</button>
+        <h3>b的值是:{{numbers.b}}</h3>
+        <button @click="numbers.b++">点我让b+1</button>
+    </div>
+    <script>
+        new Vue({
+            el: '#root3',
+            data: {
+                isHot: true,
+                x: 1,
+                numbers: {
+                    a: 1,
+                    b: 1
+                }
+            },
+            computed: {
+                info() {
+                    return this.isHot ? '炎热' : '凉爽'
+                }
+            },
+            methods: {
+                changeWeather() {
+                    this.isHot = !this.isHot
+                    this.x++
+                }
+            },
+            //监视属性
+            watch: {
+                isHot: {               //info也可以检测
+                    immediate: true,   //监视初始状态
+                    handler(newValue, oldValue) {
+                        console.log('isHot被修改了', newValue, oldValue)
+                    }
+                },
+                // 简写   当只有handler时
+                // isHot(newValue, oldValue){
+                //         console.log('isHot被修改了', newValue, oldValue)
+                //     },
+
+                'numbers.a': {
+                    handler() {
+                        console.log('a被修改了')
+                    }
+                },
+                //深度监视
+                numbers: {
+                    deep: true,
+                    handler() {
+                        console.log('numbers被修改了')
+                    }
+                }
+            }
+            // vm.$watch('isHot',{         另一种写法，用于一开始不确定要监视谁
+            //     immediate: true,  
+            //     handler(newValue, oldValue) {
+            //         console.log('isHot被修改了', newValue, oldValue)
+            //         }
+            // })
+
+
+        })
+    </script>
+</body>
+
+</html>
