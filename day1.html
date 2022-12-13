@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 一个容器 -->
+    <div id="root">
+        <!-- vue模板语法 -->
+        <!-- 1.插值语法，用于解析标签体内容 -->
+        <h1>Hello,{{name}}</h1>
+        <!-- 2.指令语法，用于解析标签 -->
+        <a v-bind:href="url.toUpperCase()" x="hello">CSDN首页</a>
+        <!-- 简写 -->
+        <a :href="homepage.url" x="hello">点我去{{homepage.name}}主页</a>
+    </div>
+
+    <!-- 双向数据绑定 -->
+    <div id="root1">
+        双向数据绑定：<input type="text" v-model:value="name">
+        <!-- v-model只能应用在表单类元素（输入类元素）上 -->
+    </div>
+    <script type="text/javascript">
+
+        //创建Vue实例
+        new Vue({  //省略const x=
+            el: '#root',  //el用于指定当前Vue实例为哪个容器服务，值通常为css选择器字符串
+            data: {  //data中用于存储数据，数据供el所指定的容器去使用，暂时先写成一个对象
+                name: 'world',
+                url: 'http://www.csdn.net',
+                homepage: {
+                    name: 'masichen',
+                    url: 'https://blog.csdn.net/masichen22?spm=1000.2115.3001.5343',
+                }
+            }
+        })
+
+        // new Vue({
+        // el: '#root1',
+        // data: {             对象式
+        //         name: 'masichen',
+        //     }
+        // })
+
+        const vm = new Vue({
+            data() {    //data的另一种写法，函数式
+                return {
+                    name: 'masichen'
+                }
+            }
+        })
+        vm.$mount('#root1')   //el的另一种写法，更灵活
+
+
+        //Object.defineProperty
+        let number = 18
+        let person = {
+            name: 'msc',
+            sex: 'female'
+        }
+        Object.defineProperty(person, 'age', {
+            //     value: 22,
+            //     enumerable: true,  //控制属性是否可以枚举
+            //     writable: true,    //控制属性是否可以被修改
+            //     configurable:true  //控制属性是否可以被删除
+
+            //当有人读取person的age属性时，get函数就会被调用
+            get() {          //全写为get: function 函数名() {
+                console.log('你读取了age属性')
+                return number
+            },
+
+            //当有人读取person的age属性时，setter就会被调用
+            set(value) {
+                console.log('你修改了age属性,且值是', value)
+                number = value
+            }
+        })
+    </script>
+</body>
+
+</html>
